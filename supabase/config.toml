@@ -1,0 +1,111 @@
+
+project_id = "xdudrydyvrbhvyigpztm"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+ip_version = "ipv4"
+port = 54323
+max_header_length = 4096
+
+[studio]
+enabled = true
+port = 54324
+api_url = "http://127.0.0.1:54321"
+openai_api_key = "env(OPENAI_API_KEY)"
+
+[inbucket]
+enabled = true
+port = 54325
+smtp_port = 54326
+pop3_port = 54327
+
+[functions.ai-chat]
+verify_jwt = false
+
+[functions.analyze-emotion]
+verify_jwt = false
+
+[functions.categorize-transaction]
+verify_jwt = false
+
+[functions.push-notifications]
+verify_jwt = false
+
+[functions.text-to-voice]
+verify_jwt = false
+
+[functions.openai-chat]
+verify_jwt = false
+
+[functions.breathing-ai-coach]
+verify_jwt = false
+
+[functions.productivity-insights]
+verify_jwt = false
+
+[functions.intelligent-insights]
+verify_jwt = false
+
+[functions.journal-ai-insights]
+verify_jwt = false
+
+[functions.financial-ai-insights]
+verify_jwt = false
+
+[functions.therapy-ai-insights]
+verify_jwt = false
+
+[functions.intelligent-chat]
+verify_jwt = false
+
+[functions.cognitive-wellbeing-ai]
+verify_jwt = false
+
+[functions.intelligent-notifications]
+verify_jwt = false
+
+[functions.gamification-ai]
+verify_jwt = false
+
+[edge-runtime]
+policy = "per_request"
+inspector_port = 8083
+
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3000"
+additional_redirect_urls = ["https://127.0.0.1:3000"]
+jwt_expiry = 3600
+refresh_token_rotation_enabled = true
+security_update_password_require_reauthentication = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = false
+template = "Your code is {{ .Code }} ."
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
