@@ -23,7 +23,7 @@ const AvatarMushu: React.FC<AvatarMushuProps> = ({ size = 64, className = "", is
     >
       {/* Imagen base de Mushu */}
       <img
-        src="/lovable-uploads/380c9afd-cc09-49ed-81e6-032d02dc9a6c.png"
+        src="/mushu-avatar.png"
         alt="Mushu, tu guía perruno"
         width={size}
         height={size}

@@ -31,22 +31,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <div className="hidden md:block">
                 <ThemeSwitcher />
               </div>
-              {user ? (
-                <Link to="/profile">
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <User className="w-5 h-5" />
-                  </Button>
-                </Link>
-              ) : (
-                <Link to="/auth">
-                  <Button variant="outline" size="sm" className="hidden sm:flex">
-                    Iniciar Sesión
-                  </Button>
-                  <Button variant="ghost" size="icon" className="sm:hidden">
-                    <User className="w-5 h-5" />
-                  </Button>
-                </Link>
-              )}
+              <Link to="/profile">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <User className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
           </header>
 

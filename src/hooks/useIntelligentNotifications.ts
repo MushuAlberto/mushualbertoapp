@@ -139,8 +139,8 @@ export const useIntelligentNotifications = () => {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(notification.title, {
         body: notification.body,
-        icon: '/lovable-uploads/380c9afd-cc09-49ed-81e6-032d02dc9a6c.png',
-        badge: '/lovable-uploads/380c9afd-cc09-49ed-81e6-032d02dc9a6c.png',
+        icon: '/mushu-avatar.png',
+        badge: '/mushu-avatar.png',
       });
     }
 

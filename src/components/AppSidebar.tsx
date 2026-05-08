@@ -129,54 +129,31 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-3 border-t border-sidebar-border">
-        {user ? (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive("/profile")}
-                tooltip="Mi Perfil"
-                className="h-12"
-              >
-                <Link to="/profile">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url} />
-                    <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300">
-                      {user.email?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
-                    <span className="font-medium text-sm truncate max-w-[120px]">
-                      {user.user_metadata?.full_name || user.email?.split("@")[0]}
-                    </span>
-                    <span className="text-xs text-muted-foreground">Mi Perfil</span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                onClick={() => signOut()}
-                tooltip="Cerrar Sesión"
-                className="text-destructive hover:text-destructive hover:bg-destructive/10"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Cerrar Sesión</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        ) : (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Iniciar Sesión">
-                <Link to="/auth">
-                  <User className="h-4 w-4" />
-                  <span>Iniciar Sesión</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        )}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={isActive("/profile")}
+              tooltip="Mi Perfil"
+              className="h-12"
+            >
+              <Link to="/profile">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.user_metadata?.avatar_url} />
+                  <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
+                  <span className="font-medium text-sm truncate max-w-[120px]">
+                    {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                  </span>
+                  <span className="text-xs text-muted-foreground">Mi Perfil</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface Profile {
   id: string;
@@ -33,8 +32,8 @@ interface UserPreferences {
 }
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: any | null;
+  session: any | null;
   profile: Profile | null;
   preferences: UserPreferences | null;
   loading: boolean;
@@ -48,141 +47,72 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const GUEST_USER = {
+  id: 'guest-user',
+  email: 'invitado@mushu.app',
+  user_metadata: {
+    full_name: 'Invitado',
+  }
+};
+
+const DEFAULT_PROFILE: Profile = {
+  id: 'guest-user',
+  username: 'invitado',
+  full_name: 'Invitado',
+  avatar_url: null,
+  sparkles: 100,
+  currency: 'Sparkles',
+  equipped_item: null,
+};
+
+const DEFAULT_PREFERENCES: UserPreferences = {
+  adhd_type: 'combined',
+  focus_duration: 25,
+  break_duration: 5,
+  notification_preferences: {
+    reminders: true,
+    motivation: true,
+    wellbeing: true,
+    achievements: true,
+  },
+  quiet_hours: {
+    enabled: false,
+    start: '22:00',
+    end: '08:00',
+  },
+  theme: 'system',
+  language: 'es',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [preferences, setPreferences] = useState<UserPreferences | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Use LocalStorage to persist profile/preferences since we are removing Supabase Auth
+  const [profile, setProfile] = useLocalStorage<Profile>('mushu_profile', DEFAULT_PROFILE);
+  const [preferences, setPreferences] = useLocalStorage<UserPreferences>('mushu_preferences', DEFAULT_PREFERENCES);
+  const [loading, setLoading] = useState(false);
 
-  const fetchProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+  // Mocked user and session
+  const user = GUEST_USER;
+  const session = { user: GUEST_USER, access_token: 'guest' };
 
-    if (!error && data) {
-      setProfile(data);
-    }
-  };
-
-  const fetchPreferences = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('user_preferences')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (!error && data) {
-      setPreferences({
-        adhd_type: data.adhd_type,
-        focus_duration: data.focus_duration,
-        break_duration: data.break_duration,
-        notification_preferences: data.notification_preferences as UserPreferences['notification_preferences'],
-        quiet_hours: data.quiet_hours as UserPreferences['quiet_hours'],
-        theme: data.theme,
-        language: data.language,
-        timezone: data.timezone,
-      });
-    }
-  };
-
-  useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-
-        if (currentSession?.user) {
-          setTimeout(() => {
-            fetchProfile(currentSession.user.id);
-            fetchPreferences(currentSession.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
-          setPreferences(null);
-        }
-      }
-    );
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-
-      if (currentSession?.user) {
-        fetchProfile(currentSession.user.id);
-        fetchPreferences(currentSession.user.id);
-      }
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
-  };
-
-  const signUp = async (email: string, password: string, fullName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName,
-        },
-      },
-    });
-    return { error };
-  };
-
+  const signIn = async () => ({ error: null });
+  const signUp = async () => ({ error: null });
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setProfile(null);
-    setPreferences(null);
+    // Reset guest data if they "sign out"
+    setProfile(DEFAULT_PROFILE);
+    setPreferences(DEFAULT_PREFERENCES);
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user) return;
-
-    const { error } = await supabase
-      .from('profiles')
-      .update(updates)
-      .eq('id', user.id);
-
-    if (!error) {
-      await fetchProfile(user.id);
-    }
+    setProfile(prev => ({ ...prev, ...updates }));
   };
 
   const updatePreferences = async (updates: Partial<UserPreferences>) => {
-    if (!user) return;
-
-    const { error } = await supabase
-      .from('user_preferences')
-      .update(updates)
-      .eq('user_id', user.id);
-
-    if (!error) {
-      await fetchPreferences(user.id);
-    }
+    setPreferences(prev => ({ ...prev, ...updates }));
   };
 
   const refreshProfile = async () => {
-    if (user) {
-      await fetchProfile(user.id);
-      await fetchPreferences(user.id);
-    }
+    // Already in sync with localStorage
   };
 
   return (
