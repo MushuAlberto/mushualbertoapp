@@ -17,11 +17,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
+        <div className="hidden md:block w-64 bg-muted/50 border-r border-border p-4">
+           <h2 className="font-bold">Mushu Menu</h2>
+        </div>
         <SidebarInset className="flex flex-col flex-1 min-w-0 overflow-hidden">
           <header className="sticky top-0 px-4 py-3 flex items-center justify-between bg-background/80 backdrop-blur z-40 border-b border-border md:px-6">
             <div className="flex items-center gap-4">
-              <SidebarTrigger className="md:hidden" />
               <Link to="/" className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent">
                 Mushu
               </Link>
@@ -43,7 +44,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {children}
           </main>
 
-          <FloatingMushuWidget />
+          {/* <FloatingMushuWidget /> */}
           <div className="md:hidden">
             <BottomNavBar />
           </div>
