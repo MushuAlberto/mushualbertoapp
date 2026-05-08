@@ -26,8 +26,8 @@ const App = () => (
         <BrowserRouter>
           <Layout>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<div className="p-20 text-4xl font-bold">Mushu Debug: Si ves esto, el problema está en el Dashboard</div>} />
+              <Route path="/dashboard" element={<div className="p-20 text-4xl font-bold">Mushu Debug: Dashboard</div>} />
               <Route path="/productivity" element={<Productivity />} />
               <Route path="/quick-notes" element={<QuickNotes />} />
               <Route path="/diary" element={<MyDiary />} />

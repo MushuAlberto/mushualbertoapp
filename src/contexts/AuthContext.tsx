@@ -86,9 +86,9 @@ const DEFAULT_PREFERENCES: UserPreferences = {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Use LocalStorage to persist profile/preferences since we are removing Supabase Auth
-  const [profile, setProfile] = useLocalStorage<Profile>('mushu_profile', DEFAULT_PROFILE);
-  const [preferences, setPreferences] = useLocalStorage<UserPreferences>('mushu_preferences', DEFAULT_PREFERENCES);
+  // Use simple state for debugging
+  const [profile, setProfile] = useState<Profile>(DEFAULT_PROFILE);
+  const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [loading, setLoading] = useState(false);
 
   // Mocked user and session
