@@ -27,7 +27,7 @@ export const useADHDProductivity = () => {
       if (error) throw error;
 
       const subtasks: Subtask[] = data.subTasks.map((st: any) => ({
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         taskId: taskId,
         title: st.title,
         completed: false,
@@ -70,7 +70,7 @@ export const useADHDProductivity = () => {
       if (error) throw error;
 
       const newTasks: Task[] = data.tasks.map((t: any) => ({
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         userId: 'current',
         title: t.title,
         description: t.description,

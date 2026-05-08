@@ -113,7 +113,7 @@ export const useIntelligentDashboard = () => {
       if (data?.insights) {
         const newInsights = data.insights.map((insight: any) => ({
           ...insight,
-          id: crypto.randomUUID(),
+          id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
           timestamp: new Date().toISOString()
         }));
 
@@ -159,7 +159,7 @@ export const useIntelligentDashboard = () => {
     // Análisis de productividad
     if (userMetrics.productivity.efficiency < 50) {
       basicInsights.push({
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         type: 'recommendation',
         title: 'Mejora tu Eficiencia',
         description: 'Tu eficiencia está por debajo del 50%. Considera reorganizar tus tareas por prioridad.',
@@ -179,7 +179,7 @@ export const useIntelligentDashboard = () => {
     // Análisis de bienestar
     if (userMetrics.wellbeing.averageMood < 4) {
       basicInsights.push({
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         type: 'alert',
         title: 'Estado Emocional Bajo',
         description: 'Tu estado de ánimo promedio ha bajado. Te sugiero hacer ejercicios de bienestar.',
@@ -199,7 +199,7 @@ export const useIntelligentDashboard = () => {
     // Análisis financiero
     if (userMetrics.finances.budgetAdherence < 80) {
       basicInsights.push({
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         type: 'prediction',
         title: 'Riesgo de Sobrepasar Presupuesto',
         description: 'Estás gastando más de lo planificado. Revisa tus gastos recientes.',

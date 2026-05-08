@@ -141,7 +141,7 @@ export function AppSidebar() {
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.user_metadata?.avatar_url} />
                   <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300">
-                    {user.email?.charAt(0).toUpperCase()}
+                    {(user.email?.charAt(0) || 'I').toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">

@@ -115,7 +115,7 @@ export const useAdvancedChat = () => {
     try {
       // Crear mensaje del usuario
       const userMessage: ChatMessage = {
-        id: crypto.randomUUID(),
+        id: typeof crypto.randomUUID === 'function' ? (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)) : Math.random().toString(36).substring(2, 11),
         userId: 'current-user',
         role: 'user',
         content: message.trim(),
@@ -155,7 +155,7 @@ export const useAdvancedChat = () => {
       if (data) {
         // Crear respuesta de Mushu
         const assistantMessage: ChatMessage = {
-          id: crypto.randomUUID(),
+          id: typeof crypto.randomUUID === 'function' ? (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)) : Math.random().toString(36).substring(2, 11),
           userId: 'current-user',
           role: 'assistant',
           content: data.message || data.fallback,
@@ -183,7 +183,7 @@ export const useAdvancedChat = () => {
       
       // Fallback a respuesta local
       const fallbackMessage: ChatMessage = {
-        id: crypto.randomUUID(),
+        id: (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11)),
         userId: 'current-user',
         role: 'assistant',
         content: generateFallbackResponse(message, emotionalState.current),
