@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useTextToVoice } from "@/hooks/useTextToVoice";
@@ -11,7 +11,8 @@ import IntelligentJournalPanel from "@/components/journal/IntelligentJournalPane
 import JournalAnalysisDisplay from "@/components/journal/JournalAnalysisDisplay";
 import IntelligentTherapyPanel from "@/components/therapy/IntelligentTherapyPanel";
 import DiaryHistory from "@/components/therapy/DiaryHistory";
-import { Brain, BookOpen, Heart, Clock, Sparkles } from "lucide-react";
+import { Brain, BookOpen, Heart, Clock, Sparkles, PenTool, BarChart3 } from "lucide-react";
+import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface JournalEntry {
   id: string;
@@ -68,9 +69,7 @@ const MyDiary: React.FC = () => {
         model: "eleven_multilingual_v2",
         language: "es"
       });
-    } catch (e) {
-      // TTS is optional
-    }
+    } catch (e) {}
 
     setCurrentText("");
     if (textareaRef.current) textareaRef.current.focus();
@@ -85,64 +84,54 @@ const MyDiary: React.FC = () => {
   const handlePromptSelect = (promptText: string) => {
     setCurrentText(promptText);
     setActiveTab('write');
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
+    if (textareaRef.current) textareaRef.current.focus();
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-lg">
-            <BookOpen className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Mi Diario</h1>
-            <p className="text-muted-foreground text-sm">Tu espacio seguro para reflexionar y crecer</p>
-          </div>
-        </div>
+  // Mock Mood Distribution from entries
+  const moodData = [
+    { name: 'Calma', value: 40, color: '#8B5CF6' },
+    { name: 'Alegría', value: 30, color: '#F59E0B' },
+    { name: 'Estrés', value: 20, color: '#EF4444' },
+    { name: 'Tristeza', value: 10, color: '#3B82F6' },
+  ];
 
-        {entries.length > 0 && (
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
-            <span className="flex items-center gap-1">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              {entries.filter(e => !e.title).length} reflexiones
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              Última: {entries[0] ? new Date(entries[0].createdAt).toLocaleDateString() : 'N/A'}
-            </span>
-          </div>
-        )}
+  return (
+    <div className="space-y-6 pb-12 animate-fade-in">
+      {/* Visual Header */}
+      <div className="bg-gradient-to-br from-violet-500/10 to-pink-500/10 p-8 rounded-[2.5rem] border border-violet-500/20 flex flex-col md:flex-row items-center gap-6">
+        <div className="p-5 rounded-[2rem] bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-xl shadow-violet-500/20">
+          <BookOpen className="w-10 h-10" />
+        </div>
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl font-black">Mi Diario</h1>
+          <p className="text-muted-foreground font-medium">Libera tu mente y descubre tus patrones</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="write" className="flex items-center gap-1.5 text-xs sm:text-sm">
-                <BookOpen className="h-4 w-4" />
+        <div className="lg:col-span-2 space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4 p-1 bg-muted/50 rounded-[2rem] h-14">
+              <TabsTrigger value="write" className="rounded-[1.5rem] data-[state=active]:bg-background font-bold flex items-center gap-2">
+                <PenTool className="h-4 w-4" />
                 <span className="hidden sm:inline">Escribir</span>
               </TabsTrigger>
-              <TabsTrigger value="analysis" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <TabsTrigger value="analysis" className="rounded-[1.5rem] data-[state=active]:bg-background font-bold flex items-center gap-2">
                 <Brain className="h-4 w-4" />
                 <span className="hidden sm:inline">Análisis</span>
               </TabsTrigger>
-              <TabsTrigger value="therapy" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <TabsTrigger value="therapy" className="rounded-[1.5rem] data-[state=active]:bg-background font-bold flex items-center gap-2">
                 <Heart className="h-4 w-4" />
                 <span className="hidden sm:inline">Terapia</span>
               </TabsTrigger>
-              <TabsTrigger value="history" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <TabsTrigger value="history" className="rounded-[1.5rem] data-[state=active]:bg-background font-bold flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span className="hidden sm:inline">Historial</span>
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="write" className="mt-4">
-              <Card className="border-border">
+            <TabsContent value="write" className="animate-fade-in">
+              <Card className="border-none bg-card/50 shadow-sm rounded-[2rem] overflow-hidden">
                 <JournalEntryList entries={entries as any} loading={loading} />
                 <JournalEntryInput
                   currentText={currentText}
@@ -154,32 +143,59 @@ const MyDiary: React.FC = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="analysis" className="mt-4">
+            <TabsContent value="analysis" className="animate-fade-in">
               {currentAnalysis ? (
                 <JournalAnalysisDisplay analysis={currentAnalysis} />
               ) : (
-                <Card className="p-8 text-center border-border">
-                  <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium mb-2">No hay análisis disponible</h3>
-                  <p className="text-muted-foreground">
-                    Escribe una entrada en tu diario para obtener un análisis emocional detallado con IA
+                <Card className="p-12 text-center border-none bg-card/50 shadow-sm rounded-[2rem]">
+                  <Brain className="h-16 w-16 mx-auto mb-4 text-muted-foreground/30" />
+                  <h3 className="text-xl font-black mb-2">Sin datos aún</h3>
+                  <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+                    Escribe cómo te sientes para que Mushu pueda analizar tu estado emocional.
                   </p>
                 </Card>
               )}
             </TabsContent>
 
-            <TabsContent value="therapy" className="mt-4">
+            <TabsContent value="therapy" className="animate-fade-in">
               <IntelligentTherapyPanel />
             </TabsContent>
 
-            <TabsContent value="history" className="mt-4">
+            <TabsContent value="history" className="animate-fade-in">
               <DiaryHistory />
             </TabsContent>
           </Tabs>
         </div>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
+           {/* Visual Mood Summary Card */}
+           <Card className="border-none bg-card/50 shadow-sm rounded-[2rem] p-6">
+              <div className="flex items-center gap-2 mb-4">
+                 <BarChart3 className="w-5 h-5 text-violet-500" />
+                 <h3 className="font-bold">Resumen Emocional</h3>
+              </div>
+              <div className="h-[200px]">
+                 <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                       <Pie data={moodData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                          {moodData.map((entry, index) => (
+                             <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                       </Pie>
+                       <Tooltip />
+                    </PieChart>
+                 </ResponsiveContainer>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-4">
+                 {moodData.map(item => (
+                    <div key={item.name} className="flex items-center gap-2">
+                       <div className="w-2 h-2 rounded-full" style={{backgroundColor: item.color}} />
+                       <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">{item.name}</span>
+                    </div>
+                 ))}
+              </div>
+           </Card>
+
           <IntelligentJournalPanel
             recentEntries={entries}
             onPromptSelect={handlePromptSelect}
