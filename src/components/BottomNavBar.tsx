@@ -49,7 +49,7 @@ const BottomNavBar: React.FC = () => {
 
   return (
     <nav
-      className="fixed z-40 bottom-0 left-0 w-full bg-background border-t border-border shadow-md md:rounded-t-xl md:w-auto md:left-1/2 md:transform md:-translate-x-1/2 md:bottom-4 md:max-w-xl flex md:mx-auto"
+      className="fixed z-40 bottom-0 left-0 w-full bg-background border-t border-border shadow-md flex md:hidden"
       role="navigation"
     >
       <ul className="flex flex-row w-full justify-between md:justify-center md:gap-1">

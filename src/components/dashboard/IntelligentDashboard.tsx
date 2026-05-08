@@ -100,34 +100,36 @@ const IntelligentDashboard: React.FC = () => {
       {/* Header con Score General */}
       <Card className="bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 border-primary/20">
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <Brain className="w-8 h-8 text-white" />
+              <div className="relative shrink-0">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                  <Brain className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                  <Zap className="w-3 h-3 text-white" />
+                <div className="absolute -top-1 -right-1 w-5 h-5 md:w-6 md:h-6 rounded-full bg-green-500 flex items-center justify-center border-2 border-white">
+                  <Zap className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" />
                 </div>
               </div>
               
               <div>
-                <h1 className="text-2xl font-bold">Dashboard Inteligente</h1>
-                <p className="text-muted-foreground">Análisis superinteligente de tu progreso</p>
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight">Dashboard Inteligente</h1>
+                <p className="text-sm text-muted-foreground line-clamp-1">Análisis superinteligente de tu progreso</p>
               </div>
             </div>
 
-            <div className="text-right">
-              <div className="text-3xl font-bold text-primary">{wellbeingScore}/100</div>
-              <p className="text-sm text-muted-foreground">Score de Bienestar</p>
+            <div className="flex items-center justify-between w-full md:w-auto md:text-right gap-6 border-t md:border-0 pt-4 md:pt-0">
+              <div className="flex flex-col md:items-end">
+                <div className="text-2xl md:text-3xl font-bold text-primary">{wellbeingScore}/100</div>
+                <p className="text-xs md:text-sm text-muted-foreground font-medium uppercase tracking-wider">Score de Bienestar</p>
+              </div>
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={generateIntelligentInsights}
                 disabled={loading}
-                className="mt-2"
+                className="shrink-0"
               >
-                <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 {loading ? 'Analizando...' : 'Actualizar'}
               </Button>
             </div>
@@ -148,24 +150,24 @@ const IntelligentDashboard: React.FC = () => {
             {highPriorityInsights.slice(0, 3).map((insight) => (
               <div 
                 key={insight.id}
-                className="flex items-center justify-between p-3 bg-white rounded-lg border border-orange-200"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-lg border border-orange-200 gap-4"
               >
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="text-orange-600">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="text-orange-600 mt-1 shrink-0">
                     {getTypeIcon(insight.type)}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-orange-900">{insight.title}</h4>
-                    <p className="text-sm text-orange-700">{insight.description}</p>
+                    <h4 className="font-semibold text-orange-900 leading-tight">{insight.title}</h4>
+                    <p className="text-sm text-orange-700 mt-1">{insight.description}</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-0 pt-2 sm:pt-0">
                   {insight.actionable && insight.action && (
                     <Button 
                       size="sm" 
                       onClick={() => executeInsightAction(insight)}
-                      className="bg-orange-600 hover:bg-orange-700"
+                      className="bg-orange-600 hover:bg-orange-700 text-white flex-1 sm:flex-initial"
                     >
                       {insight.action.label}
                       <ChevronRight className="w-3 h-3 ml-1" />
@@ -175,6 +177,7 @@ const IntelligentDashboard: React.FC = () => {
                     variant="ghost" 
                     size="sm"
                     onClick={() => dismissInsight(insight.id)}
+                    className="shrink-0"
                   >
                     <X className="w-4 h-4" />
                   </Button>
