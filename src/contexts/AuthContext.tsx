@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
-interface Profile {
+export interface Profile {
   id: string;
   username: string | null;
   full_name: string | null;
@@ -11,7 +11,7 @@ interface Profile {
   equipped_item: string | null;
 }
 
-interface UserPreferences {
+export interface UserPreferences {
   adhd_type: string;
   focus_duration: number;
   break_duration: number;
