@@ -2,45 +2,19 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
-  List,
-  FileText,
+  CheckSquare,
+  BookOpen,
   DollarSign,
   Heart,
-  Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  {
-    label: "Inicio",
-    path: "/",
-    icon: Home,
-  },
-  {
-    label: "Productividad",
-    path: "/productivity",
-    icon: List,
-  },
-  {
-    label: "Notas",
-    path: "/quick-notes",
-    icon: FileText,
-  },
-  {
-    label: "Finanzas",
-    path: "/expenses",
-    icon: DollarSign,
-  },
-  {
-    label: "Terapia",
-    path: "/therapy",
-    icon: Brain,
-  },
-  {
-    label: "Bienestar",
-    path: "/wellbeing",
-    icon: Heart,
-  },
+  { label: "Inicio", path: "/", icon: Home },
+  { label: "Enfoque", path: "/productivity", icon: CheckSquare },
+  { label: "Diario", path: "/diary", icon: BookOpen },
+  { label: "Finanzas", path: "/expenses", icon: DollarSign },
+  { label: "Bienestar", path: "/wellbeing", icon: Heart },
 ];
 
 const BottomNavBar: React.FC = () => {
@@ -49,12 +23,14 @@ const BottomNavBar: React.FC = () => {
 
   return (
     <nav
-      className="fixed z-40 bottom-0 left-0 w-full bg-background border-t border-border shadow-md flex md:hidden"
+      className="fixed z-40 bottom-0 left-0 w-full bg-background/80 backdrop-blur-lg border-t border-border flex md:hidden"
       role="navigation"
     >
-      <ul className="flex flex-row w-full justify-between md:justify-center md:gap-1">
+      <ul className="flex flex-row w-full">
         {NAV_ITEMS.map((item) => {
-          const active = location.pathname === item.path;
+          const active =
+            location.pathname === item.path ||
+            (item.path === "/" && location.pathname === "/dashboard");
           return (
             <li key={item.path} className="flex-1">
               <button
@@ -62,20 +38,29 @@ const BottomNavBar: React.FC = () => {
                 aria-label={item.label}
                 onClick={() => navigate(item.path)}
                 className={cn(
-                  "flex flex-col items-center justify-center w-full py-2 md:py-3 text-xs transition-colors",
+                  "flex flex-col items-center justify-center w-full py-2.5 text-xs transition-all duration-200",
                   active
-                    ? "text-primary font-semibold bg-accent/50"
-                    : "text-muted-foreground hover:text-primary"
+                    ? "text-violet-600 dark:text-violet-400 font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <item.icon
+                <div
                   className={cn(
-                    "h-6 w-6 mb-0.5",
-                    active ? "stroke-2" : "stroke-1"
+                    "p-1 rounded-xl mb-0.5 transition-all duration-200",
+                    active
+                      ? "bg-violet-500/10 dark:bg-violet-500/20"
+                      : ""
                   )}
-                  aria-hidden="true"
-                />
-                <span className="text-[11px] tracking-tight">{item.label}</span>
+                >
+                  <item.icon
+                    className={cn(
+                      "h-5 w-5 transition-all",
+                      active ? "stroke-[2.5px]" : "stroke-[1.5px]"
+                    )}
+                    aria-hidden="true"
+                  />
+                </div>
+                <span className="text-[10px] tracking-tight leading-none">{item.label}</span>
               </button>
             </li>
           );

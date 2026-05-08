@@ -3,14 +3,15 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Home,
-  List,
-  FileText,
+  CheckSquare,
+  BookOpen,
   DollarSign,
   Heart,
-  Brain,
   User,
-  Settings,
+  Trophy,
+  FileText,
   LogOut,
+  Brain,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,46 +24,84 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const NAV_ITEMS = [
+const MAIN_NAV = [
   { label: "Inicio", path: "/", icon: Home },
-  { label: "Productividad", path: "/productivity", icon: List },
-  { label: "Notas", path: "/quick-notes", icon: FileText },
+  { label: "Enfoque", path: "/productivity", icon: CheckSquare },
+  { label: "Mi Diario", path: "/diary", icon: BookOpen },
   { label: "Finanzas", path: "/expenses", icon: DollarSign },
-  { label: "Terapia", path: "/therapy", icon: Brain },
   { label: "Bienestar", path: "/wellbeing", icon: Heart },
+];
+
+const SECONDARY_NAV = [
+  { label: "Mis Logros", path: "/rewards", icon: Trophy },
+  { label: "Notas Rápidas", path: "/quick-notes", icon: FileText },
 ];
 
 export function AppSidebar() {
   const location = useLocation();
   const { user, signOut } = useAuth();
 
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/" || location.pathname === "/dashboard";
+    return location.pathname === path;
+  };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex flex-row items-center gap-2 px-4 py-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-pink-500 text-white shadow-lg">
           <Brain className="h-5 w-5" />
         </div>
         <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
-          <span className="font-bold text-lg">Mushu</span>
-          <span className="text-xs text-muted-foreground">Asistente Inteligente</span>
+          <span className="font-bold text-lg bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent">Mushu</span>
+          <span className="text-[11px] text-muted-foreground">Asistente Personal</span>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Menú Principal</SidebarGroupLabel>
+          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden text-xs uppercase tracking-wider text-muted-foreground">
+            Principal
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV_ITEMS.map((item) => (
+              {MAIN_NAV.map((item) => (
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     asChild
-                    isActive={location.pathname === item.path}
+                    isActive={isActive(item.path)}
+                    tooltip={item.label}
+                  >
+                    <Link to={item.path}>
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarSeparator />
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden text-xs uppercase tracking-wider text-muted-foreground">
+            Más
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {SECONDARY_NAV.map((item) => (
+                <SidebarMenuItem key={item.path}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive(item.path)}
                     tooltip={item.label}
                   >
                     <Link to={item.path}>
@@ -77,18 +116,11 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup className="mt-auto">
-          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Preferencias</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <div className="flex items-center gap-2 px-2 py-1 group-data-[collapsible=icon]:hidden">
                   <ThemeSwitcher />
-                  <span className="text-sm">Cambiar Tema</span>
-                </div>
-                <div className="hidden group-data-[collapsible=icon]:block">
-                  <SidebarMenuButton tooltip="Cambiar Tema">
-                    <ThemeSwitcher />
-                  </SidebarMenuButton>
                 </div>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -96,20 +128,22 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
+      <SidebarFooter className="p-3 border-t border-sidebar-border">
         {user ? (
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={location.pathname === "/profile"}
+                isActive={isActive("/profile")}
                 tooltip="Mi Perfil"
                 className="h-12"
               >
                 <Link to="/profile">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user.user_metadata?.avatar_url} />
-                    <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300">
+                      {user.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
                     <span className="font-medium text-sm truncate max-w-[120px]">
@@ -132,12 +166,16 @@ export function AppSidebar() {
             </SidebarMenuItem>
           </SidebarMenu>
         ) : (
-          <SidebarMenuButton asChild tooltip="Iniciar Sesión">
-            <Link to="/auth">
-              <User className="h-4 w-4" />
-              <span>Iniciar Sesión</span>
-            </Link>
-          </SidebarMenuButton>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Iniciar Sesión">
+                <Link to="/auth">
+                  <User className="h-4 w-4" />
+                  <span>Iniciar Sesión</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         )}
       </SidebarFooter>
     </Sidebar>

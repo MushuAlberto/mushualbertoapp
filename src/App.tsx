@@ -9,14 +9,11 @@ import Layout from "@/components/Layout";
 import Dashboard from "@/pages/Dashboard";
 import Productivity from "@/pages/Productivity";
 import QuickNotes from "@/pages/QuickNotes";
-import Chat from "@/pages/Chat";
-import Store from "@/pages/Store";
+import MyDiary from "@/pages/MyDiary";
+import MyRewards from "@/pages/MyRewards";
 import ExpensesPage from "./pages/Expenses";
 import NotFound from "./pages/NotFound";
-import Achievements from "./pages/Achievements";
-import JournalPage from "@/pages/Journal";
 import Wellbeing from "@/pages/Wellbeing";
-import Therapy from "@/pages/Therapy";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
 
@@ -35,15 +32,18 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/productivity" element={<Productivity />} />
               <Route path="/quick-notes" element={<QuickNotes />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/store" element={<Store />} />
-              <Route path="/journal" element={<JournalPage />} />
-              <Route path="/therapy" element={<Therapy />} />
+              <Route path="/diary" element={<MyDiary />} />
               <Route path="/expenses" element={<ExpensesPage />} />
               <Route path="/wellbeing" element={<Wellbeing />} />
-              <Route path="/achievements" element={<Achievements />} />
+              <Route path="/rewards" element={<MyRewards />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              {/* Legacy redirects */}
+              <Route path="/journal" element={<MyDiary />} />
+              <Route path="/therapy" element={<MyDiary />} />
+              <Route path="/chat" element={<Dashboard />} />
+              <Route path="/store" element={<MyRewards />} />
+              <Route path="/achievements" element={<MyRewards />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

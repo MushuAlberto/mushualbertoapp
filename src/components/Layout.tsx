@@ -22,7 +22,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <header className="sticky top-0 px-4 py-3 flex items-center justify-between bg-background/80 backdrop-blur z-40 border-b border-border md:px-6">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
-              <Link to="/" className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <Link to="/" className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent">
                 Mushu
               </Link>
             </div>
@@ -50,7 +50,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
           </header>
 
-          <main className="flex-1 overflow-y-auto pb-20 md:pb-6 p-4 md:p-6 max-w-7xl mx-auto w-full">
+          <main key={location.pathname} className="flex-1 overflow-y-auto pb-20 md:pb-6 p-4 md:p-6 max-w-7xl mx-auto w-full animate-fade-in">
             {children}
           </main>
 
