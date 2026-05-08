@@ -138,35 +138,13 @@ const Dashboard: React.FC = () => {
             </CardTitle>
             <Badge variant="secondary" className="rounded-lg">Últimos 7 días</Badge>
           </CardHeader>
-          <CardContent className="h-[250px] pt-4">
+          <CardContent className="h-[250px] pt-4 flex items-center justify-center bg-muted/20 rounded-2xl m-4">
+            <p className="text-muted-foreground">Gráfico de Actividad Semanal (Temporalmente desactivado)</p>
+            {/* 
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={activityData}>
-                <defs>
-                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <XAxis 
-                  dataKey="day" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{fill: '#94a3b8', fontSize: 12}}
-                  dy={10}
-                />
-                <Tooltip 
-                  contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#8B5CF6" 
-                  strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorValue)" 
-                />
-              </AreaChart>
+              ...
             </ResponsiveContainer>
+            */}
           </CardContent>
         </Card>
 
@@ -178,25 +156,8 @@ const Dashboard: React.FC = () => {
               Tus Gastos
             </CardTitle>
           </CardHeader>
-          <CardContent className="h-[200px] flex justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={financeData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={8}
-                  dataKey="value"
-                >
-                  {financeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          <CardContent className="h-[200px] flex items-center justify-center bg-muted/10 rounded-2xl m-4">
+            <p className="text-muted-foreground text-xs text-center">Gráfico de Gastos (Desactivado)</p>
           </CardContent>
           <div className="px-6 pb-6 grid grid-cols-2 gap-2">
             {financeData.map((item) => (
